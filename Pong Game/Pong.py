@@ -3,28 +3,29 @@
 import turtle
 
 
-class Obj:
+class GameObject:
 
-    def __init__(self, shape=None, color="white", location=(0, 0), stretch=(1, 1), hide=False, write=None):
+    def __init__(self, shape=None, color="white", location=(0, 0)):
         self.Obj = turtle.Turtle()
         self.Obj.speed(0)
         self.Obj.shape(shape)
         self.Obj.color(color)
-        self.Obj.shapesize(stretch_wid=stretch[0], stretch_len=stretch[1])
         self.Obj.penup()
         self.Obj.goto(location[0], location[1])
 
-        if hide:
-            self.Obj.hideturtle()
-        if write:
-            self.Obj.write(write, align="center", font=("Courier", 24, "normal"))
-
-        # Ball's Movement
-        self.dx = .3
-        self.dy = -.3
-
     def get_cor(self):
         return self.Obj.xcor(), self.Obj.ycor()
+
+
+class Paddle(GameObject):
+    def __init__(self, shape="square", color="white", location=(0, 0)):
+        super().__init__()
+        self.Obj.shape(shape)
+        self.Obj.color(color)
+        self.Obj.shapesize(stretch_wid=5, stretch_len=1)
+        self.Obj.goto(location[0], location[1])
+        # Score
+        self.score = 0
 
     def paddle_up(self):
         y = self.Obj.ycor()
@@ -36,37 +37,70 @@ class Obj:
         y -= 20
         self.Obj.sety(y)
 
+    def set_score(self, score):
+        self.score += score
+
+
+class Ball(GameObject):
+    def __init__(self, shape="circle", color="white", location=(0, 0)):
+        super().__init__()
+        self.Obj.shape(shape)
+        self.Obj.color(color)
+        self.Obj.shapesize(stretch_wid=1, stretch_len=1)
+        self.Obj.goto(location[0], location[1])
+
+        # Ball's Movement
+        self.dx = .3
+        self.dy = -.3
+
     def move(self):  # Moving Ball
-        ball = self.Obj
-        ball.setx(ball.xcor() + self.dx)
-        ball.sety(ball.ycor() + self.dy)
+        self.Obj.setx(self.Obj.xcor() + self.dx)
+        self.Obj.sety(self.Obj.ycor() + self.dy)
 
     def border_check(self, paddle_a, paddle_b):
-        ball = self.Obj
-
-        if ball.ycor() > 290:
-            ball.sety(290)
+        if self.Obj.ycor() > 290:
+            self.Obj.sety(290)
             self.dy *= -1
 
-        if ball.ycor() < -290:
-            ball.sety(-290)
+        elif self.Obj.ycor() < -290:
+            self.Obj.sety(-290)
             self.dy *= -1
 
-        if ball.xcor() > 390:
-            ball.goto(0, 0)
+        elif self.Obj.xcor() > 390:
+            self.Obj.goto(0, 0)
             self.dx *= -1
+            return 1  # "A scored a point"
 
-        if ball.xcor() < -390:
-            ball.goto(0, 0)
+        elif self.Obj.xcor() < -390:
+            self.Obj.goto(0, 0)
             self.dx *= -1
+            return 2  # "B scored a point"
 
         # Paddle and ball collisions
-        if (340 < ball.xcor() < 350) and (paddle_b[1] - 50 < ball.ycor() < paddle_b[1] + 50):
-            ball.setx(340)
+        elif (340 < self.Obj.xcor() < 350) and (paddle_b[1] - 50 < self.Obj.ycor() < paddle_b[1] + 50):
+            self.Obj.setx(340)
             self.dx *= -1
-        if (-340 > ball.xcor() > -350) and (paddle_a[1] - 50 < ball.ycor() < paddle_a[1] + 50):
-            ball.setx(-340)
+
+        elif (-340 > self.Obj.xcor() > -350) and (paddle_a[1] - 50 < self.Obj.ycor() < paddle_a[1] + 50):
+            self.Obj.setx(-340)
             self.dx *= -1
+
+        return 0  # "No one scored a point"
+
+
+class Pen(GameObject):
+    def __init__(self, shape=None, color="white", location=(0, 0)):
+        super().__init__()
+        self.Obj.hideturtle()
+        self.Obj.shape(shape)
+        self.Obj.color(color)
+        self.Obj.goto(location[0], location[1])
+        self.Obj.write("Player A: 0 Player B: 0", align="center", font=("Courier", 24, "normal"))
+
+    def update_score(self, score_a, score_b):
+        self.Obj.clear()
+        self.Obj.write("Player A: {} Player B: {}".format(score_a, score_b),
+                       align="center", font=("Courier", 24, "normal"))
 
 
 class Game:
@@ -79,16 +113,16 @@ class Game:
         self.wn.tracer(0)
 
         # Paddle A
-        self.paddle_a = Obj("square", "white", (-350, 0), (5, 1))
+        self.paddle_a = Paddle(location=(-350, 0))
 
         # Paddle B
-        self.paddle_b = Obj("square", "white", (350, 0), (5, 1))
+        self.paddle_b = Paddle(location=(350, 0))
 
         # Ball
-        self.ball = Obj("square", "white", (0, 0))
+        self.ball = Ball()
 
         # Pen
-        self.pen = Obj(color="white", location=(0, 260), hide=True, write="Player A: 0 Player B: 0")
+        self.pen = Pen(location=(0, 260))
 
     def main(self):
         # Keyboard binding
@@ -105,13 +139,20 @@ class Game:
             # Move the ball
             self.ball.move()
             # Border checking
-            self.ball.border_check(self.paddle_a.get_cor(), self.paddle_b.get_cor())
+            point_goes_to = self.ball.border_check(self.paddle_a.get_cor(), self.paddle_b.get_cor())
 
+            # 0: "No one scored a point"
+            # 1: "A scored a point"
+            # 2: "B scored a point"
+            if point_goes_to == 0:
+                continue
+            elif point_goes_to == 1:
+                self.paddle_a.set_score(1)
+                self.pen.update_score(self.paddle_a.score, self.paddle_b.score)
+            elif point_goes_to == 2:
+                self.paddle_b.set_score(1)
+                self.pen.update_score(self.paddle_a.score, self.paddle_b.score)
 
-
-# Score
-score_a = 0
-score_b = 0
 
 if __name__ == "__main__":
     Game().main()

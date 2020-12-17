@@ -1,6 +1,11 @@
 # Simple Pong in Python 3
 
 import turtle
+import os
+
+
+def sound():
+    os.system("afplay Bounce.wav&")
 
 
 class GameObject:
@@ -61,10 +66,12 @@ class Ball(GameObject):
         if self.Obj.ycor() > 290:
             self.Obj.sety(290)
             self.dy *= -1
+            sound()
 
         elif self.Obj.ycor() < -290:
             self.Obj.sety(-290)
             self.dy *= -1
+            sound()
 
         elif self.Obj.xcor() > 390:
             self.Obj.goto(0, 0)
@@ -80,10 +87,12 @@ class Ball(GameObject):
         elif (340 < self.Obj.xcor() < 350) and (paddle_b[1] - 50 < self.Obj.ycor() < paddle_b[1] + 50):
             self.Obj.setx(340)
             self.dx *= -1
+            sound()
 
         elif (-340 > self.Obj.xcor() > -350) and (paddle_a[1] - 50 < self.Obj.ycor() < paddle_a[1] + 50):
             self.Obj.setx(-340)
             self.dx *= -1
+            sound()
 
         return 0  # "No one scored a point"
 

@@ -23,6 +23,9 @@ class Obj:
         self.dx = .3
         self.dy = -.3
 
+    def get_cor(self):
+        return self.Obj.xcor(), self.Obj.ycor()
+
     def paddle_up(self):
         y = self.Obj.ycor()
         y += 20
@@ -37,9 +40,6 @@ class Obj:
         ball = self.Obj
         ball.setx(ball.xcor() + self.dx)
         ball.sety(ball.ycor() + self.dy)
-
-    def get_cor(self):
-        return self.Obj.xcor(), self.Obj.ycor()
 
     def border_check(self, paddle_a, paddle_b):
         ball = self.Obj
@@ -69,43 +69,56 @@ class Obj:
             self.dx *= -1
 
 
-# Screen of Board
-wn = turtle.Screen()
-wn.title("Pong")
-wn.bgcolor("black")
-wn.setup(width=800, height=600)
-wn.tracer(0)
+class Game:
+    def __init__(self):
+        # Screen of Board
+        self.wn = turtle.Screen()
+        self.wn.title("Pong")
+        self.wn.bgcolor("black")
+        self.wn.setup(width=800, height=600)
+        self.wn.tracer(0)
+
+        # Paddle A
+        self.paddle_a = Obj("square", "white", (-350, 0), (5, 1))
+
+        # Paddle B
+        self.paddle_b = Obj("square", "white", (350, 0), (5, 1))
+
+        # Ball
+        self.ball = Obj("square", "white", (0, 0))
+
+        # Pen
+        self.pen = Obj(color="white", location=(0, 260), hide=True, write="Player A: 0 Player B: 0")
+
+    def main(self):
+        # Keyboard binding
+        self.wn.listen()
+        self.wn.onkeypress(self.paddle_a.paddle_up, "w")
+        self.wn.onkeypress(self.paddle_a.paddle_down, "s")
+
+        self.wn.onkeypress(self.paddle_b.paddle_up, "Up")
+        self.wn.onkeypress(self.paddle_b.paddle_down, "Down")
+
+        # Main game loop
+        while True:
+            self.wn.update()
+            # Move the ball
+            self.ball.move()
+            # Border checking
+            self.ball.border_check(self.paddle_a.get_cor(), self.paddle_b.get_cor())
+
+
 
 # Score
 score_a = 0
 score_b = 0
 
-# Paddle A
-paddle_a = Obj("square", "white", (-350, 0), (5, 1))
-
-# Paddle B
-paddle_b = Obj("square", "white", (350, 0), (5, 1))
-
-# Ball
-ball = Obj("square", "white", (0, 0))
-
-# Pen
-pen = Obj(color="white", location=(0, 260), hide=True, write="Player A: 0 Player B: 0")
+if __name__ == "__main__":
+    Game().main()
 
 
-# Keyboard binding
-wn.listen()
-wn.onkeypress(paddle_a.paddle_up, "w")
-wn.onkeypress(paddle_a.paddle_down, "s")
 
-wn.onkeypress(paddle_b.paddle_up, "Up")
-wn.onkeypress(paddle_b.paddle_down, "Down")
 
-# Main game loop
-while True:
-    wn.update()
-    # Move the ball
-    ball.move()
-    # Border checking
-    ball.border_check(paddle_a.get_cor(), paddle_b.get_cor())
+
+
 

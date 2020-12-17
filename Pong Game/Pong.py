@@ -2,10 +2,16 @@
 
 import turtle
 import os
+# import winsound
 
 
 def sound():
+    # For Mac
     os.system("afplay Bounce.wav&")
+    # For Linux
+    # os.system("afplay Bounce.wav&")
+    # For Windows
+    # winsound.PlaySound("Bounce.wav", winsound.SND_ASYNC)
 
 
 class GameObject:

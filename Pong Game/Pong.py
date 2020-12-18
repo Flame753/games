@@ -2,6 +2,7 @@
 
 import turtle
 import os
+from random import choice
 # import winsound
 
 
@@ -51,6 +52,13 @@ class Paddle(GameObject):
     def set_score(self, score):
         self.score += score
 
+    def edge_check(self):
+        if self.Obj.ycor() > 250:
+            self.Obj.sety(250)
+
+        elif self.Obj.ycor() < -250:
+            self.Obj.sety(-250)
+
 
 class Ball(GameObject):
     def __init__(self, shape="circle", color="white", location=(0, 0)):
@@ -60,9 +68,10 @@ class Ball(GameObject):
         self.Obj.shapesize(stretch_wid=1, stretch_len=1)
         self.Obj.goto(location[0], location[1])
 
+        # Random Start with "choice"
         # Ball's Movement
-        self.dx = .3
-        self.dy = -.3
+        self.dx = .3 * choice([-1, 1])
+        self.dy = .3 * choice([-1, 1])
 
     def move(self):  # Moving Ball
         self.Obj.setx(self.Obj.xcor() + self.dx)
@@ -153,6 +162,9 @@ class Game:
             self.wn.update()
             # Move the ball
             self.ball.move()
+            # Paddle edge check
+            self.paddle_a.edge_check()
+            self.paddle_b.edge_check()
             # Border checking
             point_goes_to = self.ball.border_check(self.paddle_a.get_cor(), self.paddle_b.get_cor())
 

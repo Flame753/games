@@ -1,5 +1,7 @@
 # Import the pygame module
 import pygame
+# Import random for random number
+import random
 
 # Import pygame.locals for easier access to key coordinates
 # Updated to conform to flake8 and black standards
@@ -11,7 +13,6 @@ from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
     QUIT,
-    K_w, K_a, K_d, K_s,
 )
 
 # Define constants for the screen width and height
@@ -38,6 +39,39 @@ class Player(pygame.sprite.Sprite):
         if pressed_keys[K_RIGHT]:
             self.rect.move_ip(5, 0)
 
+        # Keep player on thee screen
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.right = SCREEN_WIDTH
+        if self.rect.top <= 0:
+            self.rect.top = 0
+        if self.rect.bottom >= SCREEN_HEIGHT:
+            self.rect.bottom = SCREEN_HEIGHT
+
+
+# Define the enemy object by extending pygame.sprite.Sprite
+# The surface you draw on the screen is now an attribute of 'enemy'
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Enemy, self).__init__()
+        self.surf = pygame.Surface((20, 10))
+        self.surf.fill((255, 255, 255))
+        self.rect = self.surf.get_rect(
+            center=(
+                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
+                random.randint(0, SCREEN_WIDTH),
+            )
+        )
+        self.speed = random.randint(5, 20)
+
+        # Move the sprite based on speed
+        # Remove the sprite when it passes the left edge of the screen
+        def update(self):
+            self.rect.move_ip(-self.speed, 0)
+            if self.rect.right < 0:
+                self.kill()
+
 
 # Initialize pygame
 pygame.init()
@@ -48,6 +82,13 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Instantiate player. Right now, this  is just a rectangle.
 player = Player()
+
+# Create groups to hold enemy sprites and all sprites
+# - enemies is used for collision detection and position updates
+# - all_sprites is used for rendering
+enemies = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group()
+all_sprites.add(player)
 
 # Variable to keep the main loop running
 running = True
@@ -75,9 +116,9 @@ while running:
     # Fill the screen with white
     screen.fill((0, 0, 0))
 
-    # Draw the player on the screen
-    screen.blit(player.surf, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-
+    # Draw all sprites
+    for entity in all_sprites:
+        screen.blit(player.surf, entity.rect)
     # Update the display
     pygame.display.flip()
 

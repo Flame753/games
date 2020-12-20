@@ -65,12 +65,12 @@ class Enemy(pygame.sprite.Sprite):
         )
         self.speed = random.randint(5, 20)
 
-        # Move the sprite based on speed
-        # Remove the sprite when it passes the left edge of the screen
-        def update(self):
-            self.rect.move_ip(-self.speed, 0)
-            if self.rect.right < 0:
-                self.kill()
+    # Move the sprite based on speed
+    # Remove the sprite when it passes the left edge of the screen
+    def update(self):
+        self.rect.move_ip(-self.speed, 0)
+        if self.rect.right < 0:
+            self.kill()
 
 
 # Initialize pygame
@@ -79,6 +79,10 @@ pygame.init()
 # Create the screen object
 # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# Create a custom event for adding a new enemy
+ADDENEMY = pygame.USEREVENT + 1
+pygame.time.set_timer(ADDENEMY, 250)
 
 # Instantiate player. Right now, this  is just a rectangle.
 player = Player()
@@ -107,18 +111,28 @@ while running:
         elif event.type == QUIT:
             running = False
 
+        # Add a new enemy?
+        elif event.type == ADDENEMY:
+            # Create the new enemy and add it to sprite groups
+            new_enemy = Enemy()
+            enemies.add(new_enemy)
+            all_sprites.add(new_enemy)
+
     # Get the set of keys pressed and check for user input
     pressed_keys = pygame.key.get_pressed()
 
     # Update the player sprite based on user keypresses
     player.update(pressed_keys)
 
+    # Update enemy position
+    enemies.update()
+
     # Fill the screen with white
     screen.fill((0, 0, 0))
 
     # Draw all sprites
     for entity in all_sprites:
-        screen.blit(player.surf, entity.rect)
+        screen.blit(entity.surf, entity.rect)
     # Update the display
     pygame.display.flip()
 

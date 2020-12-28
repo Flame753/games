@@ -98,6 +98,9 @@ class Cloud(pygame.sprite.Sprite):
             self.kill()
 
 
+# Setup for sounds. Defaults are good.
+pygame.mixer.init()
+
 # Initialize pygame
 pygame.init()
 

@@ -1,7 +1,4 @@
-from states import Power, Defense, Vitality, Magic
-import spells
-import abilites
-import items
+from SARPGaS.Model.states import Power, Defense, Vitality, Magic
 
 
 class Creature:

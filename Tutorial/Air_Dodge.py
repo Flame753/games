@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy, self).__init__()
-        self.surf = pygame.image.load("missile00.png").convert()
+        self.surf = pygame.image.load("missile.png").convert()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
         # The starting position is randomly generated, as is the speed
         self.rect = self.surf.get_rect(
@@ -75,8 +75,34 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
 
 
+# Define the cloud object by extending pygame.sprite.Sprite
+# Use an image for a better-looking sprite
+class Cloud(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Cloud, self).__init__()
+        self.surf = pygame.image.load("cloud.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+        # The starting position is randomly generated
+        self.rect = self.surf.get_rect(
+            center=(
+                random.randint(SCREEN_WIDTH + 20, SCREEN_WIDTH + 100),
+                random.randint(0, SCREEN_HEIGHT),
+            )
+        )
+
+    # Move the cloud based on a constant speed
+    # Remove the cloud when it passes the left edge of the screen
+    def update(self):
+        self.rect.move_ip(-5, 0)
+        if self.rect.right < 0:
+            self.kill()
+
+
 # Initialize pygame
 pygame.init()
+
+# Setup the clock for a decent framerate
+clock = pygame.time.Clock()
 
 # Create the screen object
 # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
@@ -85,14 +111,18 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 # Create a custom event for adding a new enemy
 ADDENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(ADDENEMY, 250)
+ADDCLOUD = pygame.USEREVENT + 2
+pygame.time.set_timer(ADDCLOUD, 1000)
 
 # Instantiate player. Right now, this  is just a rectangle.
 player = Player()
 
-# Create groups to hold enemy sprites and all sprites
+# Create groups to hold enemy sprites, cloud sprites, and all sprites
 # - enemies is used for collision detection and position updates
+# - clouds is used for position updates
 # - all_sprites is used for rendering
 enemies = pygame.sprite.Group()
+clouds = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(player)
 
@@ -120,17 +150,25 @@ while running:
             enemies.add(new_enemy)
             all_sprites.add(new_enemy)
 
+            # Add a new cloud?
+        elif event.type == ADDCLOUD:
+            # Create the new cloud and add it to sprite groups
+            new_cloud = Cloud()
+            clouds.add(new_cloud)
+            all_sprites.add(new_cloud)
+
     # Get the set of keys pressed and check for user input
     pressed_keys = pygame.key.get_pressed()
 
     # Update the player sprite based on user keypresses
     player.update(pressed_keys)
 
-    # Update enemy position
+    # Update the position of enemies and clouds
     enemies.update()
+    clouds.update()
 
-    # Fill the screen with white
-    screen.fill((0, 0, 0))
+    # Fill the screen with sky blue
+    screen.fill((135, 206, 250))
 
     # Draw all sprites
     for entity in all_sprites:
@@ -142,6 +180,9 @@ while running:
         player.kill()
         running = False
 
-    # Update the display
+    # Flip everything to the display
     pygame.display.flip()
+
+    # Ensure program maintains a rate of 30 frames per second
+    clock.tick(30)
 

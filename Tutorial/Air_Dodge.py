@@ -189,3 +189,4 @@ while running:
     # Ensure program maintains a rate of 30 frames per second
     clock.tick(30)
 
+pygame.quit()

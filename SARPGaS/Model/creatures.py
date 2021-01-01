@@ -1,29 +1,30 @@
-from SARPGaS.Model.states import Power, Defense, Vitality, Magic
+from SARPGaS.Model.stats import Stats, Magic
+from math import floor
 
 
 class Creature:
     def __init__(self):
         self.name = None
         self.type = None
-        self.level = self.power.level + self.defense.level + self.vitality.level
         self.skills = []
         self.inventory = []
-        self.power = Power()
-        self.defense = Defense()
-        self.vitality = Vitality()
+        self.stats = Stats()
+        # self.level = floor(self.power.level + self.defense.level + self.vitality.level)
 
     def __str__(self):
         return self.name
 
     def is_alive(self):
-        return self.vitality.current_hp > 0
+        return self.stats.get_stat("vitality").current_hp > 0
 
 
 class MagicCreature(Creature):
     def __init__(self):
         super().__init__()
-        self.level = self.power.level + self.defense.level + self.vitality.level + self.magic.level
-        self.magic = Magic()
+        self.stats = Stats()
+        self.stats.add_stat(Magic())
+
+        # self.level = floor(self.power.level + self.defense.level + self.vitality.level + self.magic.level // 4)
         self.spells = []
 
     def cast_spell(self):
@@ -61,4 +62,9 @@ class Elemental(MagicCreature):
 
 
 if __name__ == "__main__":
-    pass
+    s = Creature()
+    m = MagicCreature()
+    # s.stats.view_stat()
+    # m.stats.view_stat()
+    print(m.stats.get_stat("magic"))
+

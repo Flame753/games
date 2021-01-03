@@ -1,4 +1,4 @@
-types = ["Fire", "Water", "Wind", "Earth", "Ice", "Darkness", "Light", "Electric"]
+types = ["Fire", "Water", "Wind", "Earth", "Ice", "Darkness", "Light", "Electric", "Poison", "Acid"]
 
 
 def get_element_damage():

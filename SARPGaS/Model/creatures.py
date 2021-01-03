@@ -1,36 +1,21 @@
-from SARPGaS.Model.stats import Stats, Magic
-from math import floor
-
-
 class Creature:
     def __init__(self):
         self.name = None
         self.type = None
+        self.level = 0
         self.skills = []
+        self.spells = []
         self.inventory = []
-        self.stats = Stats()
+        self.HP = 10  # Health Points
+        self.MP = 10  # Magic/Mana Points
+        self.SP = 10  # Stamina Points
+        self.XP = 0   # Experience Points
 
     def __str__(self):
         return self.name
 
     def is_alive(self):
-        return self.stats.get_stat("vitality").current_hp > 0
-
-    def get_level(self):
-        return floor((self.stats.get_stat("power").level + self.stats.get_stat("defense").level + self.stats.get_stat(
-            "vitality").level) / len(self.stats.stats_list))
-
-
-class MagicCreature(Creature):
-    def __init__(self):
-        super().__init__()
-        self.stats = Stats()
-        self.stats.add_stat(Magic())
-        self.spells = []
-
-    def get_level(self):
-        return floor((self.stats.get_stat("power").level + self.stats.get_stat("defense").level + self.stats.get_stat(
-            "vitality").level + self.stats.get_stat("magic").level) / len(self.stats.stats_list))
+        return self.HP > 0
 
     def cast_spell(self):
         pass
@@ -48,7 +33,7 @@ class Monster(Creature):
         self.type = "Monster"
 
 
-class Slime(Monster, MagicCreature):
+class Slime(Monster):
     def __init__(self):
         super().__init__()
         self.name = "slime"
@@ -60,7 +45,7 @@ class Humanoid(Creature):
         self.type = "Humanoid"
 
 
-class Elemental(MagicCreature):
+class Elemental(Creature):
     def __init__(self):
         super().__init__()
         self.type = "Elemental"
@@ -68,11 +53,4 @@ class Elemental(MagicCreature):
 
 if __name__ == "__main__":
     s = Creature()
-    m = MagicCreature()
-    # s.stats.view_stat()
-    # m.stats.view_stat()
-    print(m.stats.get_stat("magic"))
-    s.stats.get_stat("power").level = 10
-    s.stats.get_stat("defense").level = 10
-    print(s.get_level())
 

@@ -13,6 +13,9 @@ class StatFrame(Exp):
     def __repr__(self):
         return self.name
 
+    def gain_xp(self, xp):
+        self.xp = xp
+
 
 class Power(StatFrame):
     def __init__(self):
@@ -51,21 +54,24 @@ class Magic(StatFrame):
 
 class Stats:
     def __init__(self):
-        self.stats = [Power(), Defense(), Vitality()]
+        self.stats_list = [Power(), Defense(), Vitality()]
 
     def add_stat(self, new_stat):
-        self.stats.append(new_stat)
+        self.stats_list.append(new_stat)
 
     def get_stat(self, stat):
-        for stat_info in self.stats:
+        for stat_info in self.stats_list:
             if stat_info.name == stat:
                 return stat_info
 
     def view_stat(self):
-        for stat in self.stats:
+        for stat in self.stats_list:
             print(str(stat))
 
 
 if __name__ == "__main__":
-    st = Stats().stats
+    st = Stats().stats_list
     print(st)
+    p = Power()
+    p.level = 10
+    print(p.level)

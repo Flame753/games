@@ -1,5 +1,5 @@
 import unittest
-import SARPGaS.Model.experiences as exp
+import SARPGaS.Trash.experiences as exp
 
 
 class MyTestCase(unittest.TestCase):

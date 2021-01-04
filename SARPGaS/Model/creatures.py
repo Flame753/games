@@ -1,15 +1,20 @@
-class Creature:
+from SARPGaS.Model.level import ExpLevel
+
+
+class Creature(ExpLevel):
     def __init__(self):
+        super().__init__()
         self.name = None
         self.type = None
-        self.level = 0
         self.skills = []
         self.spells = []
         self.inventory = []
-        self.HP = 10  # Health Points
-        self.MP = 10  # Magic/Mana Points
-        self.SP = 10  # Stamina Points
-        self.XP = 0   # Experience Points
+        self.max_HP = 10
+        self.HP = self.max_HP  # Health Points
+        self.max_MP = 10
+        self.MP = self.max_MP  # Magic/Mana Points
+        self.max_SP = 10
+        self.SP = self.max_SP  # Stamina Points
 
     def __str__(self):
         return self.name

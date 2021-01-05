@@ -1,5 +1,5 @@
 from frame import Utility
-from SARPGaS.Model.level_system import SkillPoints
+from SARPGaS.Charactor.level_system import SkillPoints
 
 
 class Identify(Utility, SkillPoints):

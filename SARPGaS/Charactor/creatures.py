@@ -1,4 +1,4 @@
-from SARPGaS.Model.level_system import Experience
+from SARPGaS.Charactor.level_system import Experience
 
 
 class Creature(Experience):
@@ -30,6 +30,14 @@ class Beast(Creature):
     def __init__(self):
         super().__init__()
         self.type = "Beast"
+
+
+class Spider(Beast):
+    def __init__(self):
+        super().__init__()
+        self.name = "Spider"
+        self.max_HP = 5
+        self.max_SP = 15
 
 
 class Monster(Creature):

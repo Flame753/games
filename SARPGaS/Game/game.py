@@ -13,41 +13,45 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 
+# initialize pygame and create window
+pygame.init()
+pygame.mixer.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("SARPGaS")
+clock = pygame.time.Clock()
+
+all_sprites = pygame.sprite.Group()
+
 
 def ControllerTick():
-    pass
+    # Handle Input Events
+    for event in pygame.event.get():
+        # check for closing window
+        if event.type == pygame.QUIT:
+            return False
+    return True
 
 
 def ViewTick():
-    pass
+    # Draw Everything
+    # Update
+    all_sprites.update()
+    # Draw / render
+    screen.fill(BLACK)
+    all_sprites.draw(screen)
+    # *after* drawing everything, flip the display
+    pygame.display.flip()
 
 
 def Main():
-    # initialize pygame and create window
-    pygame.init()
-    pygame.mixer.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("SARPGaS")
-    clock = pygame.time.Clock()
-
-    all_sprites = pygame.sprite.Group()
     # Game loop
     running = True
     while running:
         # keep loop running at the right speed
         clock.tick(FPS)
         # Process input (event)
-        for event in pygame.event.get():
-            # check for closing window
-            if event.type == pygame.QUIT:
-                running = False
-        # Update
-        all_sprites.update()
-        # Draw / render
-        screen.fill(BLACK)
-        all_sprites.draw(screen)
-        # *after* drawing everything, flip the display
-        pygame.display.flip()
+        if not ControllerTick():
+            break
 
     pygame.quit()
 

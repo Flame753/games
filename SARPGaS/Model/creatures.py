@@ -1,7 +1,7 @@
-from SARPGaS.Model.level import ExpLevel
+from SARPGaS.Model.level_system import Experience
 
 
-class Creature(ExpLevel):
+class Creature(Experience):
     def __init__(self):
         super().__init__()
         self.name = None

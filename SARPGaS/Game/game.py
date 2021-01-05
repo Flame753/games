@@ -1,4 +1,3 @@
-# Pygame template - skeleton for a new pygame project
 import pygame
 import random
 from SARPGaS.Player.player import Player

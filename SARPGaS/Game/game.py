@@ -23,7 +23,7 @@ def ControllerTick():
     for event in pygame.event.get():
         # Did the user hit a key?
         if event.type == pygame.KEYDOWN:
-            # Was it the Space bar key?
+            # Was it the Space bar key? Shot a projectile.
             if event.key == pygame.K_SPACE:
                 projectile = Projectile(player.rect.x, player.rect.y, player.facing)
                 all_sprites.add(projectile)

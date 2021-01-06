@@ -9,7 +9,7 @@ class Projectile(pygame.sprite.Sprite):
         self.surf.fill(RED)
         self.rect = self.surf.get_rect()
         self.rect.center = (x, y)
-        self.player_facing = facing
+        self.player_facing = facing  # direction player is facing, resulting in which direction the projectile will go
         self.speed = 7
 
     def update(self):
@@ -22,6 +22,7 @@ class Projectile(pygame.sprite.Sprite):
         else:
             self.rect.move_ip(-1 * self.speed, 0)
 
+        # Sees if projectile is off the screen then, kill that projectile
         if (self.rect.left > SCREEN_WIDTH) or (self.rect.right < 0) or (self.rect.top >= SCREEN_HEIGHT) or (self.rect.bottom <= 0):
             self.kill()
 

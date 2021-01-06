@@ -2,6 +2,7 @@ import pygame
 import random
 from SARPGaS.Player.player import Player
 from SARPGaS.Game.constance import SCREEN_WIDTH, SCREEN_HEIGHT, FPS, BLACK, WHITE, BLUE, RED, GREEN
+from SARPGaS.Game.projectile import Projectile
 
 # initialize pygame and create window
 pygame.init()
@@ -11,6 +12,8 @@ pygame.display.set_caption("SARPGaS")
 clock = pygame.time.Clock()
 
 all_sprites = pygame.sprite.Group()
+enemies = pygame.sprite.Group()
+projectiles = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
 
@@ -18,8 +21,15 @@ all_sprites.add(player)
 def ControllerTick():
     # Handle Input Events
     for event in pygame.event.get():
+        # Did the user hit a key?
+        if event.type == pygame.KEYDOWN:
+            # Was it the Space bar key?
+            if event.key == pygame.K_SPACE:
+                projectile = Projectile(player.rect.x, player.rect.y, player.facing)
+                all_sprites.add(projectile)
+                projectiles.add(projectile)
         # check for closing window
-        if event.type == pygame.QUIT:
+        elif event.type == pygame.QUIT:
             return False
     return True
 
@@ -27,11 +37,15 @@ def ControllerTick():
 def ViewTick(pressed_keys):
     # Draw Everything
     # Update
-    # Update the player sprite based on user keypresses
     player.update(pressed_keys)
+    projectiles.update()
     # Draw / render
     screen.fill(BLACK)
-    all_sprites.draw(screen)
+
+    # Draw all sprites
+    for entity in all_sprites:
+        screen.blit(entity.surf, entity.rect)
+
     # *after* drawing everything, flip the display
     pygame.display.flip()
 

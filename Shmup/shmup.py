@@ -1,4 +1,7 @@
 # Shmup game
+# Frozen Jam by tgfcoder <https://twitter.com/tgfcoder> licensed under CC-BY-3
+# Art from Kenney.nl
+
 import pygame
 import random
 from os import path

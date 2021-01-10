@@ -335,7 +335,7 @@ while running:
         random.choice(expl_sounds).play()
         expl = Explosion(hit.rect.center, 'lg')
         all_sprites.add(expl)
-        if random.random() > 0.9:
+        if random.random() > 0.95:
             pow = Pow(hit.rect.center)
             all_sprites.add(pow)
             powerups.add(pow)

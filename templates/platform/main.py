@@ -29,7 +29,6 @@ class Game:
             self.update()
             self.draw()
 
-
     def update(self):
         # Game Loop - Update
         self.all_sprites.update()

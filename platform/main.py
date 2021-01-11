@@ -23,15 +23,17 @@ class Game:
     def load_data(self):
         # load high score
         self.dir = path.dirname(__file__)
+        img_dir = path.join(self.dir, 'img')
         try:
             # try to make an file if not exist
-            open(path.join(self.dir, HS_FILE), 'x')
-            self.highscore = 0
+            with open(path.join(self.dir, HS_FILE), 'x') as f:
+                self.highscore = 0
         except:
             with open(path.join(self.dir, HS_FILE), 'r') as f:
                 self.highscore = int(f.read())
 
-
+        # load spritesheet image
+        self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
 
     def new(self):
         # start a new game

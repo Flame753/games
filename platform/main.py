@@ -18,21 +18,16 @@ class Game:
 
     def new(self):
         # start a new game
-        # Create Group
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
 
-        # Create sprite
-        self.player = Player()
-        p1 = Platform(0, HEIGHT - 40, WIDTH, 40)
-        p2 = Platform(WIDTH / 2 - 50, HEIGHT * 3 / 4, 100, 20)
-
-        # Add to groups
+        self.player = Player(self)
         self.all_sprites.add(self.player)
-        self.all_sprites.add(p1)
-        self.platforms.add(p1)
-        self.all_sprites.add(p2)
-        self.platforms.add(p2)
+
+        for plat in PLATFORM_LIST:
+            p = Platform(*plat)
+            self.all_sprites.add(p)
+            self.platforms.add(p)
 
         self.run()
 
@@ -48,10 +43,12 @@ class Game:
     def update(self):
         # Game Loop - Update
         self.all_sprites.update()
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-        if hits:
-            self.player.pos.y = hits[0].rect.top
-            self.player.vel.y = 0
+        # check if player hits a platform - only if falling
+        if self.player.vel.y > 0:
+            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+            if hits:
+                self.player.pos.y = hits[0].rect.top
+                self.player.vel.y = 0
 
     def events(self):
         # Game Loop - Events
@@ -61,6 +58,9 @@ class Game:
                 if self.playing:
                     self.playing = False
                 self.running = False
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_SPACE:
+                    self.player.jump()
 
     def draw(self):
         # game Loop - Draw

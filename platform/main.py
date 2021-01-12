@@ -116,7 +116,7 @@ class Game:
         while len(self.platforms) < 6:
             width = random.randrange(50, 100)
             Platform(self, random.randrange(0, WIDTH - width),
-                     random.randrange(-70, -25))
+                     random.randrange(-60, -25))
 
     def events(self):
         # Game Loop - Events

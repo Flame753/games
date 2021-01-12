@@ -67,8 +67,14 @@ class Game:
         if self.player.vel.y > 0:
             hits = pg.sprite.spritecollide(self.player, self.platforms, False)
             if hits:
-                self.player.pos.y = hits[0].rect.top
-                self.player.vel.y = 0
+                lowest = hits[0]
+                for hit in hits:
+                    if hit.rect.bottom > lowest.rect.bottom:
+                        lowest = hit
+                if self.player.pos.y < hits[0].rect.centery:
+                    self.player.pos.y = hits[0].rect.top
+                    self.player.vel.y = 0
+                    self.player.jumping = False
 
         # if player reaches top 1/4 of screen
         if self.player.rect.top <= HEIGHT / 4:
@@ -92,7 +98,7 @@ class Game:
         while len(self.platforms) < 6:
             width = random.randrange(50, 100)
             p = Platform(self, random.randrange(0, WIDTH - width),
-                         random.randrange(-75, -30))
+                         random.randrange(-70, -25))
             self.platforms.add(p)
             self.all_sprites.add(p)
 
@@ -107,6 +113,9 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
                     self.player.jump()
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_SPACE:
+                    self.player.jump_cut()
 
     def draw(self):
         # game Loop - Draw

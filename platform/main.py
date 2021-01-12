@@ -34,6 +34,9 @@ class Game:
 
         # load spritesheet image
         self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
+        # load sounds
+        self.snd_dir = path.join(self.dir, 'snd')
+        self.jump_sound = pg.mixer.Sound(path.join(self.snd_dir, 'Jump33.wav'))
 
     def new(self):
         # start a new game

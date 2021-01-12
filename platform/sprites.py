@@ -2,6 +2,7 @@
 
 import pygame as pg
 from settings import *
+from random import choice
 vec = pg.math.Vector2
 
 
@@ -29,8 +30,8 @@ class Player(pg.sprite.Sprite):
         self.load_images()
         self.image = self.standing_frames[0]
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self.pos = vec(WIDTH / 2, HEIGHT / 2)
+        # self.rect.center = (40, HEIGHT - 100)
+        self.pos = vec(40, HEIGHT - 100)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
@@ -52,9 +53,9 @@ class Player(pg.sprite.Sprite):
 
     def jump(self):
         # jump only if standing on a platform
-        self.rect.x += 1
+        self.rect.x += 2
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
-        self.rect.x -= 1
+        self.rect.x -= 2
         if hits:
             self.vel.y = -PLAYER_JUMP
 
@@ -71,6 +72,7 @@ class Player(pg.sprite.Sprite):
         self.acc.x += self.vel.x * PLAYER_FRICTION
         # equation of motion
         self.vel += self.acc
+        # makes running animation come to a complete stop
         if abs(self.vel.x) < 0.1:
             self.vel.x = 0
         self.pos += self.vel + 0.5 * self.acc
@@ -125,10 +127,13 @@ class Player(pg.sprite.Sprite):
 
 
 class Platform(pg.sprite.Sprite):
-    def __init__(self, x, y, w, h):
+    def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((w, h))
-        self.image.fill(GREEN)
+        self.game = game
+        image = [self.game.spritesheet.get_image(0, 288, 380, 94),
+                 self.game.spritesheet.get_image(213, 1662, 201, 100)]
+        self.image = choice(image)
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y

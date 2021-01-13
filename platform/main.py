@@ -1,4 +1,5 @@
 # jumpy! (a platform game)
+# Followed tutorials By Chris Bradfield used (Kidscancode)
 # Art from Kenney.nl
 # Happy Tune by http://opengameart.org/users/syncopika
 # Yippee by http://opengameart.org/users/snabisch

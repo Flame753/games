@@ -1,3 +1,6 @@
+# Tile-based Game
+# Followed tutorials By Chris Bradfield used (Kidscancode)
+
 import pygame as pg
 import sys
 from settings import *
@@ -10,7 +13,7 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
-        pg.key.set_repeat(500, 100)
+        pg.key.set_repeat(100, 100)
         self.load_data()
 
     def load_data(self):
@@ -75,6 +78,7 @@ class Game:
 
     def show_go_screen(self):
         pass
+
 
 # create the game object
 g = Game()

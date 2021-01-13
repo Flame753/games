@@ -1,5 +1,5 @@
 # Tile-based Game
-# Followed tutorials By Chris Bradfield used (Kidscancode)
+# Followed tutorials By Chris Bradfield on (Kidscancode)
 
 import pygame as pg
 import sys

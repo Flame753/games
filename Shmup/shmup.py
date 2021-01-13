@@ -1,5 +1,5 @@
 # Shmup game
-# Followed tutorials By Chris Bradfield used (Kidscancode)
+# Followed tutorials By Chris Bradfield on (Kidscancode)
 # Frozen Jam by tgfcoder <https://twitter.com/tgfcoder> licensed under CC-BY-3
 # Art from Kenney.nl
 

@@ -157,7 +157,6 @@ class Cloud(pg.sprite.Sprite):
             self.kill()
 
 
-
 class Platform(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self._layer = PLATFORM_LAYER

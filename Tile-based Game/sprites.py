@@ -55,6 +55,7 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_SPACE]:
             now = pg.time.get_ticks()
             if now - self.last_shot > BULLET_RATE:
+                self.last_shot = now
                 dir = vec(1, 0).rotate(-self.rot)
                 pos = self.pos + BARREL_OFFSET.rotate(-self.rot)
                 Bullet(self.game, pos, dir)

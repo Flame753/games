@@ -14,7 +14,6 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
-        pg.key.set_repeat(100, 100)
         self.load_data()
 
     def load_data(self):
@@ -48,7 +47,7 @@ class Game:
         # game loop - set self.playing = False to end the game
         self.playing = True
         while self.playing:
-            self.dt = self.clock.tick(FPS) / 1000
+            self.dt = self.clock.tick(FPS) / 1000.0  # fix for Python 2.x
             self.events()
             self.update()
             self.draw()
